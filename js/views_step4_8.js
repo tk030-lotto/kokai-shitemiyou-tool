@@ -210,6 +210,17 @@ export function renderStep8(state) {
 
       ${promptsHtml}
 
+      <div class="guide-box" style="border-left-color: var(--accent-cyan); margin-top: 24px;">
+        <h4>🔗 関連ツールのご案内</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+          公開後に問題が発生した際や、次の開発ステップで迷ったときは、以下の支援ツールもご活用いただけます。
+        </p>
+        <ul style="margin-top: 8px;">
+          <li><strong>「AIに聞いてみよう。」</strong>: 開発の疑問や次にやるべきことをAIと一緒に整理するツール</li>
+          <li><strong>「エラーで止まらない。」</strong>: 発生したエラーメッセージをもとに解決プロンプトを作成するツール</li>
+        </ul>
+      </div>
+
       <div class="btn-group">
         <button class="btn btn-secondary" id="btn-prev">前のステップへ</button>
         <button class="btn btn-primary" id="btn-finish">最初に戻る</button>
