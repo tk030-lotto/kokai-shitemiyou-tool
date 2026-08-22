@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>公開してみよう。 - AI開発 公開アシスタント</title>
+  <meta name="description" content="AIを使って作ったソフトウェアをGitHubやGitHub Pagesで公開するための初心者向けステップガイド。">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-badge">
+        <span>🚀</span>
+        <span>AI開発 公開アシスタント</span>
+      </div>
+      <h1 class="app-title">公開してみよう。</h1>
+      <p class="app-subtitle">せっかく作ったなら、世界に届けてみよう。</p>
+    </header>
+
+    <!-- Progress Section -->
+    <section class="progress-section" id="progress-section" style="display: none;">
+      <div class="progress-header">
+        <span id="progress-step-label">ステップ 1 / 8</span>
+        <span id="progress-percent">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+      </div>
+    </section>
+
+    <!-- Dynamic Step Content Area -->
+    <main id="step-container">
+      <!-- JavaScript will render step card here -->
+    </main>
+
+    <!-- Footer -->
+    <footer style="margin-top: 32px; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+      <p>公開してみよう。ツール &copy; 2026 MIT License</p>
+      <p style="margin-top: 6px;">
+        <button id="btn-global-reset" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer; font-size: 0.8rem;">
+          最初からやり直す（リセット）
+        </button>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
