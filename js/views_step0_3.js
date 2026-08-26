@@ -37,7 +37,7 @@ export function renderStep0() {
 
 export function renderStep1(state) {
   const quickTagsHtml = QUICK_TAGS.map(tag => `
-    <button type="button" class="quick-tag-btn ${state.toolType === tag.type ? 'active' : ''}" data-tag-type="${tag.type}" data-tag-label="${tag.label}">
+    <button type="button" class="quick-tag-btn ${state.toolType === tag.type ? 'active' : ''}" data-tag-type="${tag.type}" data-tag-label="${tag.label}" aria-pressed="${state.toolType === tag.type ? 'true' : 'false'}">
       ${tag.label}
     </button>
   `).join('');
@@ -94,7 +94,8 @@ export function renderStep2(state) {
     checklistHtml += `</div>`;
   });
 
-  const securityPrompt = TROUBLE_PROMPTS.find(p => p.id === 'security-audit').getPrompt(state.toolName);
+  const securityPromptObj = TROUBLE_PROMPTS.find(p => p.id === 'security-audit');
+  const securityPrompt = securityPromptObj ? securityPromptObj.getPrompt(state.toolName) : '';
 
   return `
     <div class="step-card">
