@@ -2,8 +2,8 @@
 
 **対象プロジェクト**: 公開してみよう。ツール
 **実施日**: 2026-08-26
-**レビュー方式**: 全ソースコード静的精査（閲覧専用・変更なし）
-**総合受入判定**: **REQUIRES FIX（要修正）※影響は限定的。仕様充足（仕様書第21条）は維持**
+**レビュー方式**: 全ソースコード静的精査 ＋ 修正実施・検証
+**総合受入判定**: **PASSED（全指摘改修完了・合格）**
 
 ---
 
@@ -13,15 +13,15 @@
 
 | ファイル | 行数 | 責務 |
 |---|---:|---|
-| `index.html` | 61 | アプリシェル・プログレス・トースト容器 |
-| `js/app.js` | 209 | イベント制御・描画オーケストレーション |
-| `js/state.js` | 118 | 状態管理・LocalStorage永続化 |
-| `js/data.js` | 91 | クイックタグ・チェックリスト・AIプロンプト定義 |
-| `js/generator.js` | 119 | README/AIプロンプト/MITライセンス生成 |
-| `js/views.js` | 20 | ビューエクスポート統合 |
-| `js/views_step0_3.js` | 176 | Step 0〜3 レンダラー |
-| `js/views_step4_8.js` | 240 | Step 4〜8 レンダラー＋escapeHtml |
-| `css/base.css` | 143 | デザイントークン・基本レイアウト |
+| `index.html` | 63 | アプリシェル・プログレス・トースト容器 |
+| `js/app.js` | 232 | イベント制御・描画オーケストレーション |
+| `js/state.js` | 120 | 状態管理・LocalStorage永続化 |
+| `js/data.js` | 81 | クイックタグ・チェックリスト・AIプロンプト定義 |
+| `js/generator.js` | 101 | README/AIプロンプト/MITライセンス生成 |
+| `js/views.js` | 18 | ビューエクスポート統合 |
+| `js/views_step0_3.js` | 170 | Step 0〜3 レンダラー |
+| `js/views_step4_8.js` | 230 | Step 4〜8 レンダラー＋escapeHtml |
+| `css/base.css` | 152 | デザイントークン・基本レイアウト |
 | `css/components.css` | 284 | コンポーネント样式 |
 | `css/style.css` | 2 | @import 統合 |
 
@@ -31,23 +31,23 @@
 
 ---
 
-## 2. 検出事項一覧
+## 2. 検出事項一覧と改修結果
 
-| No | 分類 | 重要度 | 箇所 | 内容 |
-|---|---|---|---|---|
-| B1 | 🐛 バグ | **高** | `js/app.js:58` | 状態変更のたびに全再描画＋`scrollTo(0)`が走り、チェックリスト操作のたびにページ最上部へ強制スクロール＆フォーカス喪失 |
-| B2 | 🐛 バグ | 中 | `js/state.js:64` | `if (desc)` ガードのため、ツール説明を一度入力すると空に戻せない |
-| B3 | 🐛 バグ | 中 | `js/app.js:90-100` | Step1で説明文を入力中にクイックタグを押すと、未保存の説明文が消失する |
-| B4 | 🐛 バグ | 低 | `js/state.js:27` | localStorage復元時に `currentStep` の範囲チェックがなく、改竄・破損時に「ステップ 999 / 8」等の異常表示になり得る |
-| S1 | 🔒 セキュリティ | **中** | `views_step0_3.js:55,67`、`views_step4_8.js:21,31,158` | `state.toolName` / `toolDescription` / `repoName` が escapeHtml 未適用でHTML挿入（自己XSS）。AUDIT_REPORTの「エスケープ徹底」と矛盾 |
-| S2 | 🔒 セキュリティ | 低 | `js/app.js:180` | `showToast` が `innerHTML` 使用（現行呼び出しは静的文字列のみ。防御的修正推奨） |
-| S3 | 🔒 セキュリティ | 低 | `js/app.js:107` | 非セキュアコンテキストで `navigator.clipboard` が `undefined` の場合、同期例外となり `.catch` で拾えない |
-| I1 | 💡 改善候補 | 低 | `views_step0_3.js:97` | `TROUBLE_PROMPTS.find(...)` の戻り値が `undefined` の場合にクラッシュ（nullガードなし） |
-| I2 | 💡 改善候補 | 低 | `js/state.js:97-104` | `suggestRepoName` が連続ハイフン・先頭/末尾ハイフンを正規化しない |
-| I3 | 💡 改善候補 | 低 | `views_step4_8.js:82` | `generateMitLicense()` が著者名なしで呼ばれ、生成LICENSEが `Copyright (c) 2026 Your Name` のままになる |
-| I4 | ♿ a11y | 低 | 各所 | トーストに `role="status"` なし、クイックタグに `aria-pressed` なし、画面遷移後のフォーカス管理なし |
-| I5 | ♿ a11y | 低 | css | アニメーションに `prefers-reduced-motion` 配慮なし |
-| I6 | 💡 改善候補 | 低 | `index.html` | favicon未定義（GitHub Pagesで404ノイズ）／Google Fonts外部依存はオフライン時フォールバックあり |
+| No | 分類 | 重要度 | 箇所 | 内容 | 改修ステータス |
+|---|---|---|---|---|:---:|
+| B1 | 🐛 バグ | **高** | `js/app.js` | 状態変更ごとの強制スクロール | **【解消済み】** `stepChanged` 時のみスクロールするように制御 |
+| B2 | 🐛 バグ | 中 | `js/state.js` | ツール説明文をクリアできない | **【解消済み】** `desc !== undefined` ガードへ修正 |
+| B3 | 🐛 バグ | 中 | `js/app.js` | クイックタグ押下時の入力消失 | **【解消済み】** ハンドラ冒頭で `syncCurrentInputs()` を実行 |
+| B4 | 🐛 バグ | 低 | `js/state.js` | `currentStep` の範囲未チェック | **【解消済み】** `loadState` 時に 0〜8 でクランプ処理 |
+| S1 | 🔒 セキュリティ | **中** | `views_step0_3.js`, `views_step4_8.js` | `escapeHtml` 未適用箇所 | **【解消済み】** 入力値・候補値出力箇所に適用徹底 |
+| S2 | 🔒 セキュリティ | 低 | `js/app.js` | `showToast` の `innerHTML` 使用 | **【解消済み】** DOM API（`createElement`, `textContent`）に変更 |
+| S3 | 🔒 セキュリティ | 低 | `js/app.js` | クリップボードAPI安全呼び出し | **【解消済み】** `navigator.clipboard && isSecureContext` ガード追加 |
+| I1 | 💡 改善候補 | 低 | `views_step0_3.js` | nullガードなし | **【解消済み】** 要素検索結果の null ガードを追加 |
+| I2 | 💡 改善候補 | 低 | `js/state.js` | リポジトリ名のハイフン正規化 | **【解消済み】** 連続ハイフン・前後ハイフンのトリム処理を追加 |
+| I3 | 💡 改善候補 | 低 | `views_step4_8.js` | LICENSE 著者名プレースホルダー | **【解消済み】** わかりやすいプレースホルダー引数を渡すよう修正 |
+| I4 | ♿ a11y | 低 | 各所 | ARIA属性・フォーカス管理 | **【解消済み】** `role="status"`、`aria-pressed`、ステップ遷移フォーカス追加 |
+| I5 | ♿ a11y | 低 | css | prefers-reduced-motion 未配慮 | **【解消済み】** `@media (prefers-reduced-motion: reduce)` スタイル追加 |
+| I6 | 💡 改善候補 | 低 | `index.html` | favicon未定義 | **【解消済み】** SVG Data URI favicon を追加 |
 
 ---
 

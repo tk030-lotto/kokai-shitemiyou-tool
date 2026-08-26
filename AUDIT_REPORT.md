@@ -56,22 +56,22 @@
 ### 1. プロトコル第17条（300行ルール）の遵守
 全ソースコードが300行未満で適切にモジュール分割されています。
 
-- `index.html`: 62 行（PASS）
-- `css/base.css`: 144 行（PASS）
-- `css/components.css`: 285 行（PASS）
-- `css/style.css`: 3 行（PASS）
-- `js/data.js`: 92 行（PASS）
-- `js/state.js`: 119 行（PASS）
-- `js/generator.js`: 120 行（PASS）
-- `js/views_step0_3.js`: 177 行（PASS）
+- `index.html`: 63 行（PASS）
+- `css/base.css`: 152 行（PASS）
+- `css/components.css`: 284 行（PASS）
+- `css/style.css`: 2 行（PASS）
+- `js/data.js`: 81 行（PASS）
+- `js/state.js`: 120 行（PASS）
+- `js/generator.js`: 101 行（PASS）
+- `js/views_step0_3.js`: 170 行（PASS）
 - `js/views_step4_8.js`: 230 行（PASS）
-- `js/views.js`: 20 行（PASS）
-- `js/app.js`: 210 行（PASS）
+- `js/views.js`: 18 行（PASS）
+- `js/app.js`: 232 行（PASS）
 
 ### 2. アーキテクチャと堅牢性
 - **Zero-Dependency**: 外部npmパッケージやCDNライブラリへの依存ゼロ（Pure Vanilla JS / CSS）。
 - **単一責任の原則**: データ定義（`data.js`）、状態管理（`state.js`）、生成ロジック（`generator.js`）、UIレンダリング（`views_*.js`）、イベント制御（`app.js`）が明確に分離。
-- **エラー耐性**: クリップボードAPIのフォールバック処理、LocalStorageの安全な読み書き。
+- **エラー耐性**: クリップボードAPIの安全な実行とフォールバック、LocalStorageの安全な読み書き・境界値クランプ。
 
 ---
 
@@ -84,7 +84,8 @@
   - アクセント: インディゴ `#6366f1` / エメラルド `#10b981` / シアン `#06b6d4`
   - フォント: `Inter`, `JetBrains Mono`, `Noto Sans JP`
 - [x] **レスポンシブ & タッチ操作性**: スマホ幅（375px〜）からPC幅まで崩れのないフレキシブルなレイアウト。
-- [x] **マイクロインタラクション**: ステップ遷移アニメーション、プログレスバーのスムーズな伸縮、1クリックコピーとトースト通知。
+- [x] **アクセシビリティ & モーション配慮**: `role="status"` / `aria-live="polite"`、`aria-pressed`、ステップ遷移フォーカス管理、`prefers-reduced-motion` 対応。
+- [x] **マイクロインタラクション**: ステップ遷移アニメーション、プログレスバーのスムーズな伸縮、1クリックコピーと安全なトースト通知。
 
 ---
 
@@ -92,7 +93,7 @@
 
 - [x] **機密情報のハードコード**: 0件（APIキー、トークン、パスワード、個人情報、ローカル絶対パス等の混入なし）。
 - [x] **安全設計**: サーバー通信、外部トラッキング、GitHubアカウント情報の収集等は一切行わないクライアント完結型設計。
-- [x] **XSS対策**: 入力文字列のHTMLエスケープ（`escapeHtml`）を徹底。
+- [x] **XSS対策**: `escapeHtml` を全UIレンダラー（`views_step0_3.js`, `views_step4_8.js`）の動的展開箇所（ツール名、説明文、リポジトリ名等）に徹底適用。`showToast` も DOM API で安全に構築。
 
 ---
 
@@ -105,10 +106,13 @@
   - `df9e158`: MIT LICENSE を追加
   - `91a9e23`: Webアプリケーションの初期実装
   - `97a1974`: RECORD.md の更新
+  - `b13ee21`: fix: B1-B4のバグ修正
+  - `d1b2a1c`: fix: S1-S3のセキュリティ・堅牢性改修
+  - `865d359`: feat: I1-I6の改善・a11y向上
 - [x] **ドキュメントの整合性と永続保存**:
   - `LICENSE` (MIT) の配置
   - `README.md` および `仕様書.md` の完備
-  - `RECORD.md` の更新と `各種情報/Projects/公開してみよう。ツール/` への永続同期
+  - `CODE_REVIEW_REPORT.md` および `RECORD.md` の更新と `各種情報/Projects/公開してみよう。ツール/` への永続同期
 
 ---
 

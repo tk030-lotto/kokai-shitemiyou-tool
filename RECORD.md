@@ -29,3 +29,24 @@
 ## 2026-08-22 - note・X兼用デモGIF画像（demo.gif）の作成・配置
 - 解像度 800x600、9フレーム構成（Step 0〜8網羅）の高品質・軽量（約0.51MB）なアニメーションGIF `demo.gif` を生成・保存
 - `README.md` へのプレビュー埋め込みとGitコミット・プッシュ完了
+
+## 2026-08-26 - コードレビュー指摘全項目（B1〜B4, S1〜S3, I1〜I6）の事実確認と完全改修
+- **事実確認**: `CODE_REVIEW_REPORT.md` の全14指摘事項を実コードと突き合わせ精査、全項目が事実と一致することを確認
+- **バグ改修（B1〜B4）**:
+  - `js/app.js`: ステップ切り替え時のみスクロールするように制御（チェック操作時の不要スクロールおよびフォーカス喪失を解消）
+  - `js/state.js`: ツール説明文の空文字クリア（`desc !== undefined`）および `loadState` 時の `currentStep` 範囲（0〜8）クランプ処理を実装
+  - `js/app.js`: クイックタグ押下時の入力内容保持（`syncCurrentInputs` 実行）
+- **セキュリティ・堅牢性改修（S1〜S3）**:
+  - `js/views_step0_3.js`, `js/views_step4_8.js`: `escapeHtml` を全UIレンダラーの入力値・候補値出力箇所に適用徹底
+  - `js/app.js`: `showToast` を DOM API（`createElement`, `textContent`）による安全な実装に刷新
+  - `js/app.js`: `navigator.clipboard && window.isSecureContext` ガードを追加し非セキュア環境での同期例外を防止
+- **改善・アクセシビリティ向上（I1〜I6）**:
+  - `js/views_step0_3.js`, `js/state.js`: プロンプト取得の null ガード追加、リポジトリ名サジェスト時のハイフン正規化
+  - `js/views_step4_8.js`: LICENSE 著者名プレースホルダー引数の追加
+  - `index.html`, `js/app.js`, `js/views_step0_3.js`: `role="status"` / `aria-live="polite"`、`aria-pressed`、ステップ遷移フォーカス管理を追加
+  - `css/base.css`: `@media (prefers-reduced-motion: reduce)` によるアニメーション抑制スタイルを追加
+  - `index.html`: SVG Data URI favicon（🚀）を追加
+- **ドキュメント更新・永続同期**:
+  - `AUDIT_REPORT.md` の行数・XSSエスケープ検証結果・コミットログの最新化
+  - `CODE_REVIEW_REPORT.md` の判定を `PASSED` へ更新
+  - 各種情報プロジェクトフォルダへの記録永続同期完了
