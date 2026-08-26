@@ -52,7 +52,7 @@ export function renderStep1(state) {
 
       <div class="form-group">
         <label class="form-label" for="input-tool-name">ソフトウェア名 / ツール名</label>
-        <input type="text" id="input-tool-name" class="form-input" placeholder="例: ファイル名一括変更ツール、便利カレンダーWeb" value="${state.toolName}">
+        <input type="text" id="input-tool-name" class="form-input" placeholder="例: ファイル名一括変更ツール、便利カレンダーWeb" value="${escapeHtml(state.toolName)}">
       </div>
 
       <div class="form-group">
@@ -64,7 +64,7 @@ export function renderStep1(state) {
 
       <div class="form-group">
         <label class="form-label" for="input-tool-desc">どんなツールですか？（簡単な説明）</label>
-        <textarea id="input-tool-desc" class="form-textarea" placeholder="例: 選択したフォルダ内の連番ファイルを指定した名前に一括リネームできるWebツールです。">${state.toolDescription}</textarea>
+        <textarea id="input-tool-desc" class="form-textarea" placeholder="例: 選択したフォルダ内の連番ファイルを指定した名前に一括リネームできるWebツールです。">${escapeHtml(state.toolDescription)}</textarea>
       </div>
 
       <div class="btn-group">

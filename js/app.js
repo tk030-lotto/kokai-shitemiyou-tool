@@ -114,12 +114,15 @@ function initApp() {
     if (copyBtn) {
       const textToCopy = decodeURIComponent(copyBtn.dataset.copyText || '');
       if (textToCopy) {
-        navigator.clipboard.writeText(textToCopy).then(() => {
-          showToast('クリップボードにコピーしました！');
-        }).catch(() => {
-          // fallback
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            showToast('クリップボードにコピーしました！');
+          }).catch(() => {
+            copyFallback(textToCopy);
+          });
+        } else {
           copyFallback(textToCopy);
-        });
+        }
       }
       return;
     }
@@ -187,7 +190,12 @@ function showToast(message) {
 
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `<span>✓</span> <span>${message}</span>`;
+  const icon = document.createElement('span');
+  icon.textContent = '✓';
+  const msg = document.createElement('span');
+  msg.textContent = message;
+  toast.appendChild(icon);
+  toast.appendChild(msg);
   container.appendChild(toast);
 
   setTimeout(() => {

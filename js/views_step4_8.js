@@ -18,7 +18,7 @@ export function renderStep4(state) {
 
       <div class="form-group">
         <label class="form-label" for="input-repo-name">リポジトリ名の候補（英数字・ハイフン）</label>
-        <input type="text" id="input-repo-name" class="form-input" value="${suggestedRepo}">
+        <input type="text" id="input-repo-name" class="form-input" value="${escapeHtml(suggestedRepo)}">
         <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 4px;">
           ※ GitHub上では日本語ではなく半角英数字（小文字・ハイフン区切り）が推奨されます。
         </p>
@@ -28,7 +28,7 @@ export function renderStep4(state) {
         <h4>リポジトリ作成の手順</h4>
         <ol>
           <li><a href="https://github.com/new" target="_blank" rel="noopener" style="color: var(--primary); font-weight: bold;">GitHub New Repository 画面</a> を開きます。</li>
-          <li><strong>Repository name</strong> に <code>${suggestedRepo}</code> を入力します。</li>
+          <li><strong>Repository name</strong> に <code>${escapeHtml(suggestedRepo)}</code> を入力します。</li>
           <li>公開設定で <strong>Public</strong>（誰でも見られる公開設定）を選択します。</li>
           <li><strong>「Add a README file」にチェックを入れずに</strong>（または入れても可）一番下の <strong>［Create repository］</strong> ボタンを押します。</li>
         </ol>
@@ -155,7 +155,7 @@ export function renderStep7(state) {
       <div class="guide-box" style="border-left-color: var(--success);">
         <h4>🎉 公開URLの形式</h4>
         <p style="font-family: var(--font-mono); font-size: 0.9rem; color: #ffffff;">
-          https://&lt;あなたのユーザー名&gt;.github.io/${state.repoName || '&lt;リポジトリ名&gt;'}/
+          https://&lt;あなたのユーザー名&gt;.github.io/${escapeHtml(state.repoName || '<リポジトリ名>')}/
         </p>
       </div>
 
