@@ -57,9 +57,14 @@ function initApp() {
       progressBarFill.style.width = `${percent}%`;
     }
 
-    // Scroll to top only on step change
+    // Scroll to top and set focus on step change
     if (stepChanged) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      const stepCard = container.querySelector('.step-card');
+      if (stepCard) {
+        stepCard.setAttribute('tabindex', '-1');
+        stepCard.focus({ preventScroll: true });
+      }
     }
     lastRenderedStep = currentStep;
   }

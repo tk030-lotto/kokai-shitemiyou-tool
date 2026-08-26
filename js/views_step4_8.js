@@ -79,7 +79,7 @@ export function renderStep5() {
 export function renderStep6(state) {
   const readmeText = generateReadme(state.toolName, state.toolType, state.toolDescription);
   const aiPrompt = generateAiReadmePrompt(state.toolName, state.toolType, state.toolDescription);
-  const mitLicense = generateMitLicense();
+  const mitLicense = generateMitLicense('Your Name (またはGitHubユーザー名)');
 
   return `
     <div class="step-card">

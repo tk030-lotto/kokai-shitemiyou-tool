@@ -101,7 +101,9 @@ class StateManager {
       .trim()
       .toLowerCase()
       .replace(/[\s_　]+/g, '-')
-      .replace(/[^\w-]/g, '');
+      .replace(/[^\w-]/g, '')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
     return sanitized || 'my-awesome-tool';
   }
 
