@@ -24,7 +24,9 @@ class StateManager {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return { ...initialState, ...JSON.parse(saved) };
+        const merged = { ...initialState, ...JSON.parse(saved) };
+        merged.currentStep = Math.max(0, Math.min(8, Number(merged.currentStep) || 0));
+        return merged;
       }
     } catch (e) {
       console.warn('LocalStorage load failed:', e);
@@ -61,7 +63,7 @@ class StateManager {
   updateToolInfo(name, type, desc = '') {
     this.state.toolName = name;
     this.state.toolType = type;
-    if (desc) this.state.toolDescription = desc;
+    if (desc !== undefined) this.state.toolDescription = desc;
     if (!this.state.repoName && name) {
       // 簡易ローマ字/英語化候補
       this.state.repoName = this.suggestRepoName(name);

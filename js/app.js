@@ -35,9 +35,12 @@ function initApp() {
   const progressBarFill = document.getElementById('progress-bar-fill');
   const globalResetBtn = document.getElementById('btn-global-reset');
 
+  let lastRenderedStep = null;
+
   function render() {
     const state = store.getState();
     const currentStep = state.currentStep;
+    const stepChanged = currentStep !== lastRenderedStep;
 
     // Render step view
     const renderer = stepRenderers[currentStep] || renderStep0;
@@ -54,8 +57,11 @@ function initApp() {
       progressBarFill.style.width = `${percent}%`;
     }
 
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll to top only on step change
+    if (stepChanged) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    lastRenderedStep = currentStep;
   }
 
   // Event Delegation for Container
@@ -89,13 +95,17 @@ function initApp() {
     // Quick tag button
     const tagBtn = e.target.closest('.quick-tag-btn');
     if (tagBtn) {
+      syncCurrentInputs();
       const type = tagBtn.dataset.tagType;
       const label = tagBtn.dataset.tagLabel;
       const nameInput = document.getElementById('input-tool-name');
-      if (nameInput && !nameInput.value.trim()) {
-        nameInput.value = label;
+      const descInput = document.getElementById('input-tool-desc');
+      const currentDesc = descInput ? descInput.value : store.getState().toolDescription;
+      let finalName = nameInput ? nameInput.value : '';
+      if (!finalName.trim()) {
+        finalName = label;
       }
-      store.updateToolInfo(nameInput ? nameInput.value : label, type);
+      store.updateToolInfo(finalName, type, currentDesc);
       return;
     }
 
