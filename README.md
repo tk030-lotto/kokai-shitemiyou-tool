@@ -19,6 +19,8 @@ AIを使ってソフトウェアを作った。
 
 このツールは、作ったソフトウェアをGitHubなどで公開するための手順を案内する小さなWebツールです。
 
+🔗 **公開URL（GitHub Pages）**: [https://tk030-lotto.github.io/kokai-shitemiyou-tool/](https://tk030-lotto.github.io/kokai-shitemiyou-tool/)
+
 ![デモプレビュー](demo.gif)
 
 ---
