@@ -1,3 +1,5 @@
+window.KokaiApp = window.KokaiApp || {};
+
 /**
  * generator.js - README & AIプロンプト自動生成ロジック
  */
@@ -5,7 +7,7 @@
 /**
  * 入力されたソフトウェア情報から標準README.mdを生成
  */
-export function generateReadme(toolName, toolType, toolDescription = '') {
+function generateReadme(toolName, toolType, toolDescription = '') {
   const name = toolName || 'マイツール';
   const desc = toolDescription || 'AIと一緒に作成したソフトウェアです。';
   const year = new Date().getFullYear();
@@ -72,7 +74,7 @@ Copyright (c) ${year}
 /**
  * AIにREADMEの作成を依頼するためのプロンプトを生成
  */
-export function generateAiReadmePrompt(toolName, toolType, toolDescription = '') {
+function generateAiReadmePrompt(toolName, toolType, toolDescription = '') {
   return `自作のソフトウェア「${toolName || 'ツール'}」をGitHubで公開するための、分かりやすく魅力的な \`README.md\` を作成してください。
 
 【ツールの概要】
@@ -93,7 +95,7 @@ GitHubで読みやすく、初心者にも伝わるトーンでMarkdown形式で
 /**
  * MITライセンス全文を生成
  */
-export function generateMitLicense(authorName = 'Your Name') {
+function generateMitLicense(authorName = 'Your Name') {
   const year = new Date().getFullYear();
   return `MIT License
 
@@ -117,3 +119,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.`;
 }
+
+window.KokaiApp.generateReadme = generateReadme;
+window.KokaiApp.generateAiReadmePrompt = generateAiReadmePrompt;
+window.KokaiApp.generateMitLicense = generateMitLicense;
+

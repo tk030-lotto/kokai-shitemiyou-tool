@@ -1,19 +1,20 @@
+window.KokaiApp = window.KokaiApp || {};
+
 /**
- * views.js - UIレンダラーのエクスポート統合
+ * views.js - UIレンダラー一覧の管理
  */
+window.KokaiApp.getStepRenderers = function() {
+  const app = window.KokaiApp;
+  return [
+    app.renderStep0,
+    app.renderStep1,
+    app.renderStep2,
+    app.renderStep3,
+    app.renderStep4,
+    app.renderStep5,
+    app.renderStep6,
+    app.renderStep7,
+    app.renderStep8
+  ];
+};
 
-export {
-  renderStep0,
-  renderStep1,
-  renderStep2,
-  renderStep3
-} from './views_step0_3.js';
-
-export {
-  renderStep4,
-  renderStep5,
-  renderStep6,
-  renderStep7,
-  renderStep8,
-  escapeHtml
-} from './views_step4_8.js';
