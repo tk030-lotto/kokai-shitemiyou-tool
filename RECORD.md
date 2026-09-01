@@ -80,3 +80,7 @@
 - **Homepage**: `https://tk030-lotto.github.io/kokai-shitemiyou-tool/`
 - **Topics**: `ai-development`, `beginner-guide`, `github`, `github-pages`, `open-source`, `web-app`
 - **設定確認**: `gh repo view` により全項目が正常に設定・反映されていることを確認。
+
+## 2026-09-01 - note記事下書きテキストの削除コミット・プッシュ完了
+- **削除対象**: `「公開してみよう。」せっかく作ったなら、GitHubで公開してみる.txt`（各種情報永続化フォルダへのバックアップ保存済み）
+- **Git操作**: 削除状態をステージング・コミットし、GitHubリモートへプッシュ完了。
