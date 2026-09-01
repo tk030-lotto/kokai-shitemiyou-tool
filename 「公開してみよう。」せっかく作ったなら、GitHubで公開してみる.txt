@@ -1,6 +1,9 @@
 
 # 「公開してみよう。」せっかく作ったなら、GitHubで公開してみる
 
+🔗 公開Webツール（GitHub Pages）：
+https://tk030-lotto.github.io/kokai-shitemiyou-tool/
+
 AIを使ってソフトウェアを作った。
 
 動いた。
@@ -583,4 +586,11 @@ AIを使ってソフトウェアを作ることが、以前より身近になり
 
 を作りました。
 
+---
+
+### 🔗 リンク
+- **公開Webツール（GitHub Pages）**: https://tk030-lotto.github.io/kokai-shitemiyou-tool/
+- **GitHubリポジトリ**: https://github.com/tk030-lotto/kokai-shitemiyou-tool
+
 #AI開発 #生成AI #AI開発ツール #個人開発 #GitHub #GitHubPages #OSS #Webアプリ #AI活用 #ソフトウェア開発
+
