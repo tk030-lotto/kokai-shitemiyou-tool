@@ -59,3 +59,11 @@
 - **検証**:
   - `node -c` による全JSファイルの構文検証（エラー0件）。
   - ブラウザサブエージェントによる `file://` プロトコル下での実機検証（Step 0初期表示、Step 1〜2遷移、クイックタグ選択、チェックリスト連動）を実施し、完全動作を確認。
+
+## 2026-09-01 - リポジトリのPublic化およびGitHub Pages公開デプロイ完了
+- **リポジトリ公開**: `gh repo edit` により可視性を `private` から `public` に変更完了。
+- **GitHub Pages 有効化**: `main` ブランチをソースとして GitHub Pages を有効化（ビルド完了ステータス `built` 確認）。
+- **公開URL**: `https://tk030-lotto.github.io/kokai-shitemiyou-tool/`
+- **検証**:
+  - ブラウザサブエージェントによる公開URLへの実機アクセス、Step 0描画、Step 1遷移の正常動作を確認。
+  - `README.md` に公開URLリンクを追記。
