@@ -1,11 +1,10 @@
+window.KokaiApp = window.KokaiApp || {};
+
 /**
  * views_step0_3.js - Step 0 〜 Step 3 のUIレンダラー
  */
 
-import { QUICK_TAGS, PRE_CHECK_ITEMS, TROUBLE_PROMPTS } from './data.js';
-import { escapeHtml } from './views_step4_8.js';
-
-export function renderStep0() {
+function renderStep0() {
   return `
     <div class="step-card">
       <div class="step-tag">Step 0 / はじめに</div>
@@ -35,8 +34,11 @@ export function renderStep0() {
   `;
 }
 
-export function renderStep1(state) {
-  const quickTagsHtml = QUICK_TAGS.map(tag => `
+function renderStep1(state) {
+  const quickTags = window.KokaiApp.QUICK_TAGS || [];
+  const escapeHtml = window.KokaiApp.escapeHtml || ((s) => s);
+
+  const quickTagsHtml = quickTags.map(tag => `
     <button type="button" class="quick-tag-btn ${state.toolType === tag.type ? 'active' : ''}" data-tag-type="${tag.type}" data-tag-label="${tag.label}" aria-pressed="${state.toolType === tag.type ? 'true' : 'false'}">
       ${tag.label}
     </button>
@@ -75,9 +77,13 @@ export function renderStep1(state) {
   `;
 }
 
-export function renderStep2(state) {
+function renderStep2(state) {
+  const preCheckItems = window.KokaiApp.PRE_CHECK_ITEMS || [];
+  const troublePrompts = window.KokaiApp.TROUBLE_PROMPTS || [];
+  const escapeHtml = window.KokaiApp.escapeHtml || ((s) => s);
+
   let checklistHtml = '';
-  PRE_CHECK_ITEMS.forEach(cat => {
+  preCheckItems.forEach(cat => {
     checklistHtml += `<div class="checklist-category"><div class="category-title">${cat.category}</div>`;
     cat.items.forEach(item => {
       const isChecked = !!state.checks[item.id];
@@ -94,7 +100,7 @@ export function renderStep2(state) {
     checklistHtml += `</div>`;
   });
 
-  const securityPromptObj = TROUBLE_PROMPTS.find(p => p.id === 'security-audit');
+  const securityPromptObj = troublePrompts.find(p => p.id === 'security-audit');
   const securityPrompt = securityPromptObj ? securityPromptObj.getPrompt(state.toolName) : '';
 
   return `
@@ -129,7 +135,7 @@ export function renderStep2(state) {
   `;
 }
 
-export function renderStep3(state) {
+function renderStep3(state) {
   return `
     <div class="step-card">
       <div class="step-tag">Step 3 / アカウント準備</div>
@@ -175,3 +181,9 @@ export function renderStep3(state) {
     </div>
   `;
 }
+
+window.KokaiApp.renderStep0 = renderStep0;
+window.KokaiApp.renderStep1 = renderStep1;
+window.KokaiApp.renderStep2 = renderStep2;
+window.KokaiApp.renderStep3 = renderStep3;
+

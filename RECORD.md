@@ -50,3 +50,12 @@
   - `AUDIT_REPORT.md` の行数・XSSエスケープ検証結果・コミットログの最新化
   - `CODE_REVIEW_REPORT.md` の判定を `PASSED` へ更新
   - 各種情報プロジェクトフォルダへの記録永続同期完了
+
+## 2026-09-01 - ローカル環境（file://）での不動作（CORSブロック）解消
+- **原因特定**: `index.html` の `<script type="module">` 形式による ES Modules 読み込みが、ローカル直接実行（`file://` プロトコル）時にブラウザの CORS 制約でブロックされ、JavaScriptが実行されずクリックや画面描画が停止していた問題を特定。
+- **改修内容**:
+  - `js/data.js`, `js/generator.js`, `js/state.js`, `js/views_step0_3.js`, `js/views_step4_8.js`, `js/views.js`, `js/app.js`: ES Modules（`import`/`export`）依存を廃止し、グローバル名前空間 `window.KokaiApp` を介した連携構成にリファクタリング。
+  - `index.html`: 各スクリプトの依存順序に沿ったクラシックスクリプト読み込みに変更。
+- **検証**:
+  - `node -c` による全JSファイルの構文検証（エラー0件）。
+  - ブラウザサブエージェントによる `file://` プロトコル下での実機検証（Step 0初期表示、Step 1〜2遷移、クイックタグ選択、チェックリスト連動）を実施し、完全動作を確認。
