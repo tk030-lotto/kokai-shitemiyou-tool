@@ -1,5 +1,3 @@
-window.KokaiApp = window.KokaiApp || {};
-
 /**
  * state.js - アプリケーション状態管理
  */
@@ -121,8 +119,4 @@ class StateManager {
   }
 }
 
-const store = new StateManager();
-
-window.KokaiApp.StateManager = StateManager;
-window.KokaiApp.store = store;
-
+export const store = new StateManager();

@@ -1,20 +1,11 @@
-window.KokaiApp = window.KokaiApp || {};
-
 /**
  * views_step4_8.js - Step 4 〜 Step 8 のUIレンダラー
  */
 
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+import { TROUBLE_PROMPTS } from './data.js';
+import { generateReadme, generateAiReadmePrompt, generateMitLicense } from './generator.js';
 
-function renderStep4(state) {
+export function renderStep4(state) {
   const suggestedRepo = state.repoName || 'my-tool';
 
   return `
@@ -51,7 +42,7 @@ function renderStep4(state) {
   `;
 }
 
-function renderStep5() {
+export function renderStep5() {
   return `
     <div class="step-card">
       <div class="step-tag">Step 5 / ファイルの登録</div>
@@ -85,8 +76,7 @@ function renderStep5() {
   `;
 }
 
-function renderStep6(state) {
-  const { generateReadme, generateAiReadmePrompt, generateMitLicense } = window.KokaiApp;
+export function renderStep6(state) {
   const readmeText = generateReadme(state.toolName, state.toolType, state.toolDescription);
   const aiPrompt = generateAiReadmePrompt(state.toolName, state.toolType, state.toolDescription);
   const mitLicense = generateMitLicense('Your Name (またはGitHubユーザー名)');
@@ -143,7 +133,7 @@ function renderStep6(state) {
   `;
 }
 
-function renderStep7(state) {
+export function renderStep7(state) {
   return `
     <div class="step-card">
       <div class="step-tag">Step 7 / Webアプリの公開</div>
@@ -177,8 +167,8 @@ function renderStep7(state) {
   `;
 }
 
-function renderStep8(state) {
-  const promptsHtml = (window.KokaiApp.TROUBLE_PROMPTS || []).map(item => {
+export function renderStep8(state) {
+  const promptsHtml = TROUBLE_PROMPTS.map(item => {
     const promptText = item.getPrompt(state.toolName);
     return `
       <div class="guide-box" style="margin-bottom: 16px;">
@@ -239,10 +229,12 @@ function renderStep8(state) {
   `;
 }
 
-window.KokaiApp.escapeHtml = escapeHtml;
-window.KokaiApp.renderStep4 = renderStep4;
-window.KokaiApp.renderStep5 = renderStep5;
-window.KokaiApp.renderStep6 = renderStep6;
-window.KokaiApp.renderStep7 = renderStep7;
-window.KokaiApp.renderStep8 = renderStep8;
-
+export function escapeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}

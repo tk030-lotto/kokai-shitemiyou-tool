@@ -2,9 +2,7 @@
  * data.js - 公開してみよう。ツールのマスターデータ & テンプレート定義
  */
 
-window.KokaiApp = window.KokaiApp || {};
-
-const QUICK_TAGS = [
+export const QUICK_TAGS = [
   { id: 'web-app', label: 'Webアプリ（HTML/CSS/JS）', type: 'web', desc: 'ブラウザで直接動くWebアプリ' },
   { id: 'python-cli', label: 'Pythonスクリプト・CLIツール', type: 'cli', desc: 'コマンドラインで実行するPythonツール' },
   { id: 'file-renamer', label: 'ファイル名一括変更ツール', type: 'utility', desc: '特定の命名規則でファイルを整理するツール' },
@@ -12,7 +10,7 @@ const QUICK_TAGS = [
   { id: 'business-tool', label: '業務効率化・定型作業ツール', type: 'business', desc: '日々の定型業務を自動化・短縮するツール' }
 ];
 
-const PRE_CHECK_ITEMS = [
+export const PRE_CHECK_ITEMS = [
   {
     category: '基本確認（動作・構成）',
     items: [
@@ -39,7 +37,7 @@ const PRE_CHECK_ITEMS = [
   }
 ];
 
-const TROUBLE_PROMPTS = [
+export const TROUBLE_PROMPTS = [
   {
     id: 'gh-pages-404',
     title: 'GitHub Pagesで 404 Not Found になる',
@@ -91,8 +89,3 @@ GitHubで映える見出し構成、スクリーンショットの載せ方、�
 公開して問題ないか、隠すべき情報（環境変数化など）がないかをチェックし、安全に公開するためのアドバイスをください。`
   }
 ];
-
-window.KokaiApp.QUICK_TAGS = QUICK_TAGS;
-window.KokaiApp.PRE_CHECK_ITEMS = PRE_CHECK_ITEMS;
-window.KokaiApp.TROUBLE_PROMPTS = TROUBLE_PROMPTS;
-
