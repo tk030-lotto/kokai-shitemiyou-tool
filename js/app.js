@@ -1,17 +1,33 @@
-window.KokaiApp = window.KokaiApp || {};
-
 /**
  * app.js - メインアプリケーション制御
  */
 
-function initApp() {
-  const { store, getStepRenderers } = window.KokaiApp;
-  if (!store || !getStepRenderers) {
-    console.error('KokaiApp dependencies not loaded.');
-    return;
-  }
-  const stepRenderers = getStepRenderers();
+import { store } from './state.js';
+import {
+  renderStep0,
+  renderStep1,
+  renderStep2,
+  renderStep3,
+  renderStep4,
+  renderStep5,
+  renderStep6,
+  renderStep7,
+  renderStep8
+} from './views.js';
 
+const stepRenderers = [
+  renderStep0,
+  renderStep1,
+  renderStep2,
+  renderStep3,
+  renderStep4,
+  renderStep5,
+  renderStep6,
+  renderStep7,
+  renderStep8
+];
+
+function initApp() {
   const container = document.getElementById('step-container');
   const progressSection = document.getElementById('progress-section');
   const progressLabel = document.getElementById('progress-step-label');
@@ -213,8 +229,4 @@ function copyFallback(text) {
   document.body.removeChild(textarea);
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initApp);
-} else {
-  initApp();
-}
+document.addEventListener('DOMContentLoaded', initApp);
