@@ -67,6 +67,23 @@
   box-shadow: 0 0 0 2px var(--primary-light);
 }
 
+.form-input[aria-invalid="true"] {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.form-hint {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+.form-error {
+  font-size: 0.85rem;
+  color: #f87171;
+  margin-top: 6px;
+}
+
 .form-textarea {
   resize: vertical;
   min-height: 80px;
@@ -274,6 +291,66 @@
   background: var(--primary);
 }
 
+.btn-danger {
+  background: #dc2626;
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+/* Modal Dialog */
+.modal-backdrop[hidden] {
+  display: none;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1100;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.modal-dialog:focus {
+  outline: none;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.modal-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
 @media (max-width: 640px) {
   .app-container { padding: 16px 12px 60px; }
   .step-card { padding: 20px 16px; }
@@ -281,4 +358,6 @@
   .step-title { font-size: 1.2rem; }
   .btn-group { flex-direction: column-reverse; }
   .btn { width: 100%; }
+  .modal-actions { flex-direction: column-reverse; }
+  .modal-actions .btn { width: 100%; }
 }

@@ -9,6 +9,7 @@ const initialState = {
   toolName: '',
   toolType: 'web', // 'web' | 'cli' | 'data' | 'utility' | 'business' | 'other'
   toolDescription: '',
+  authorName: '',
   hasGithubAccount: true,
   repoName: '',
   checks: {}, // { [checkId: string]: boolean }
@@ -18,29 +19,51 @@ class StateManager {
   constructor() {
     this.state = this.loadState();
     this.listeners = [];
+    this.saveErrorListeners = [];
+    this.hasNotifiedSaveError = false;
   }
 
   loadState() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        const merged = { ...initialState, ...JSON.parse(saved) };
+        const parsed = JSON.parse(saved);
+        const merged = { ...initialState, ...parsed };
         merged.currentStep = Math.max(0, Math.min(8, Number(merged.currentStep) || 0));
+        merged.toolName = typeof merged.toolName === 'string' ? merged.toolName : '';
+        merged.toolDescription = typeof merged.toolDescription === 'string' ? merged.toolDescription : '';
+        merged.authorName = typeof merged.authorName === 'string' ? merged.authorName : '';
+        merged.repoName = typeof merged.repoName === 'string' ? merged.repoName : '';
+        merged.checks = merged.checks && typeof merged.checks === 'object' ? { ...merged.checks } : {};
         return merged;
       }
     } catch (e) {
       console.warn('LocalStorage load failed:', e);
     }
-    return { ...initialState };
+    return { ...initialState, checks: {} };
   }
 
-  saveState() {
+  saveState({ notify = true } = {}) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
+      this.hasNotifiedSaveError = false;
     } catch (e) {
       console.warn('LocalStorage save failed:', e);
+      if (!this.hasNotifiedSaveError) {
+        this.hasNotifiedSaveError = true;
+        this.saveErrorListeners.forEach(listener => listener(e));
+      }
     }
-    this.notify();
+    if (notify) {
+      this.notify();
+    }
+  }
+
+  onSaveError(listener) {
+    this.saveErrorListeners.push(listener);
+    return () => {
+      this.saveErrorListeners = this.saveErrorListeners.filter(l => l !== listener);
+    };
   }
 
   getState() {
@@ -60,20 +83,20 @@ class StateManager {
     this.setStep(this.state.currentStep - 1);
   }
 
-  updateToolInfo(name, type, desc = '') {
+  updateToolInfo(name, type, desc = '', authorName = undefined, { notify = true, autoSuggestRepo = true } = {}) {
     this.state.toolName = name;
     this.state.toolType = type;
     if (desc !== undefined) this.state.toolDescription = desc;
-    if (!this.state.repoName && name) {
-      // 簡易ローマ字/英語化候補
+    if (authorName !== undefined) this.state.authorName = authorName;
+    if (autoSuggestRepo && !this.state.repoName && name) {
       this.state.repoName = this.suggestRepoName(name);
     }
-    this.saveState();
+    this.saveState({ notify });
   }
 
   setCheck(checkId, isChecked) {
     this.state.checks[checkId] = isChecked;
-    this.saveState();
+    this.saveState({ notify: false });
   }
 
   setGithubAccountStatus(hasAccount) {
@@ -81,13 +104,13 @@ class StateManager {
     this.saveState();
   }
 
-  setRepoName(repoName) {
+  setRepoName(repoName, { notify = true } = {}) {
     this.state.repoName = repoName;
-    this.saveState();
+    this.saveState({ notify });
   }
 
   resetAll() {
-    this.state = { ...initialState };
+    this.state = { ...initialState, checks: {} };
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch (e) {
@@ -97,14 +120,14 @@ class StateManager {
   }
 
   suggestRepoName(name) {
-    const sanitized = name
+    if (!name) return '';
+    return name
       .trim()
       .toLowerCase()
       .replace(/[\s_　]+/g, '-')
-      .replace(/[^\w-]/g, '')
+      .replace(/[^a-z0-9-]/g, '')
       .replace(/-+/g, '-')
       .replace(/^-+|-+$/g, '');
-    return sanitized || 'my-awesome-tool';
   }
 
   subscribe(listener) {

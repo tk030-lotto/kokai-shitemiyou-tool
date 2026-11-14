@@ -6,7 +6,14 @@ import { TROUBLE_PROMPTS } from './data.js';
 import { generateReadme, generateAiReadmePrompt, generateMitLicense } from './generator.js';
 
 export function renderStep4(state) {
-  const suggestedRepo = state.repoName || 'my-tool';
+  const suggestedRepo = state.repoName || '';
+  const hasToolName = !!(state.toolName && state.toolName.trim());
+  const canSuggestFromToolName = hasToolName && /[a-z0-9]/i.test(state.toolName);
+  const showJapaneseRepoHint = hasToolName && !canSuggestFromToolName && !suggestedRepo;
+  const trimmedDesc = state.toolDescription ? state.toolDescription.trim() : '';
+  const descGuidance = trimmedDesc
+    ? `任意入力ですが、設定すると訪問者に内容が伝わりやすくなります。入力例：<code>${escapeHtml(trimmedDesc)}</code>`
+    : 'ツールの用途を1文で書く欄です（任意入力ですが、設定すると訪問者に内容が伝わりやすくなります）。';
 
   return `
     <div class="step-card">
@@ -17,10 +24,19 @@ export function renderStep4(state) {
       </p>
 
       <div class="form-group">
-        <label class="form-label" for="input-repo-name">リポジトリ名の候補（英数字・ハイフン）</label>
-        <input type="text" id="input-repo-name" class="form-input" value="${escapeHtml(suggestedRepo)}">
-        <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 4px;">
-          ※ GitHub上では日本語ではなく半角英数字（小文字・ハイフン区切り）が推奨されます。
+        <label class="form-label" for="input-repo-name">リポジトリ名（半角英数字・<code>.</code>・<code>_</code>・<code>-</code>）</label>
+        <input type="text" id="input-repo-name" class="form-input" placeholder="例: my-tool" value="${escapeHtml(suggestedRepo)}" aria-describedby="repo-name-error">
+        <p id="repo-name-error" class="form-error" role="alert" hidden></p>
+        ${showJapaneseRepoHint ? `
+          <p class="form-hint" style="color: var(--warning);">
+            ※ 日本語名からは候補を自動作成できません。半角英数字とハイフンで入力してください。
+          </p>
+        ` : ''}
+        <p class="form-hint">
+          ※ 使用できる文字は半角英数字、<code>.</code>、<code>_</code>、<code>-</code>（100文字以内、<code>.</code> や <code>..</code> のみは不可）です。
+        </p>
+        <p class="form-hint">
+          ※ 入力内容はこのブラウザ内（localStorage）に自動保存されます。
         </p>
       </div>
 
@@ -28,8 +44,9 @@ export function renderStep4(state) {
         <h4>リポジトリ作成の手順</h4>
         <ol>
           <li><a href="https://github.com/new" target="_blank" rel="noopener" style="color: var(--primary); font-weight: bold;">GitHub New Repository 画面</a> を開きます。</li>
-          <li><strong>Repository name</strong> に <code>${escapeHtml(suggestedRepo)}</code> を入力します。</li>
-          <li>公開設定で <strong>Public</strong>（誰でも見られる公開設定）を選択します。</li>
+          <li><strong>Repository name</strong> に <code id="repo-name-preview">${escapeHtml(suggestedRepo || '<リポジトリ名>')}</code> を入力します。</li>
+          <li><strong>Description</strong> 欄にツールの説明を入力します。${descGuidance}</li>
+          <li>公開設定で <strong>Public</strong>（一般公開の設定）を選択します。</li>
           <li><strong>「Add a README file」にチェックを入れずに</strong>（または入れても可）一番下の <strong>［Create repository］</strong> ボタンを押します。</li>
         </ol>
       </div>
@@ -48,11 +65,11 @@ export function renderStep5() {
       <div class="step-tag">Step 5 / ファイルの登録</div>
       <h2 class="step-title">ファイルをGitHubに登録する</h2>
       <p class="step-desc">
-        Gitコマンドを使わなくても、ブラウザ上からドラッグ＆ドロップで簡単にファイルを登録できます。
+        Gitコマンドを使わなくても、ブラウザ上からドラッグ＆ドロップでファイルを登録できます。
       </p>
 
       <div class="guide-box">
-        <h4>ブラウザからの簡単アップロード手順</h4>
+        <h4>ブラウザからのアップロード手順</h4>
         <ol>
           <li>作成したリポジトリのトップ画面を開きます。</li>
           <li>画面右上または中央にある <strong>［uploading an existing file］</strong>（または <strong>［Add file］➔［Upload files］</strong>）をクリックします。</li>
@@ -77,24 +94,31 @@ export function renderStep5() {
 }
 
 export function renderStep6(state) {
-  const readmeText = generateReadme(state.toolName, state.toolType, state.toolDescription);
+  const readmeText = generateReadme(state.toolName, state.toolType, state.toolDescription, state.authorName);
   const aiPrompt = generateAiReadmePrompt(state.toolName, state.toolType, state.toolDescription);
-  const mitLicense = generateMitLicense('Your Name (またはGitHubユーザー名)');
+  const mitLicense = generateMitLicense(state.authorName);
+  const hasAuthorName = !!(state.authorName && state.authorName.trim());
 
   return `
     <div class="step-card">
       <div class="step-tag">Step 6 / ドキュメントとライセンス</div>
       <h2 class="step-title">READMEとライセンスの整備</h2>
       <p class="step-desc">
-        README.mdがあると、訪れた人が「何のツールか」「どう使うのか」をすぐに理解できます。
+        README.mdがあると、訪れた人が「何のツールか」「どう使うのか」を把握しやすくなります。
       </p>
+
+      ${!hasAuthorName ? `
+        <p class="form-hint" style="color: var(--warning); margin-bottom: 16px;">
+          ※ Step 1 の著作権者名が未入力のため、Copyright は <code>[著作権者名]</code> になっています。コピーするには Step 1 で著作権者名を入力してください。
+        </p>
+      ` : ''}
 
       <div class="guide-box">
         <h4>自動生成された README.md テンプレート</h4>
         <div class="code-container">
           <div class="code-header">
             <span>README.md</span>
-            <button class="btn-copy" data-copy-text="${encodeURIComponent(readmeText)}">READMEをコピー</button>
+            <button class="btn-copy" data-copy-type="readme" data-copy-text="${encodeURIComponent(readmeText)}">READMEをコピー</button>
           </div>
           <div class="code-content">${escapeHtml(readmeText)}</div>
         </div>
@@ -105,21 +129,21 @@ export function renderStep6(state) {
         <div class="code-container">
           <div class="code-header">
             <span>AI相談用プロンプト</span>
-            <button class="btn-copy" data-copy-text="${encodeURIComponent(aiPrompt)}">プロンプトをコピー</button>
+            <button class="btn-copy" data-copy-type="prompt" data-copy-text="${encodeURIComponent(aiPrompt)}">プロンプトをコピー</button>
           </div>
           <div class="code-content">${escapeHtml(aiPrompt)}</div>
         </div>
       </div>
 
       <div class="guide-box" style="margin-top: 16px;">
-        <h4>ライセンス（MIT License）</h4>
+        <h4>ライセンスの例（MIT License）</h4>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">
-          自由に使ってもらいたい場合は、世界で最も標準的なMITライセンスを設定するのがおすすめです。
+          MITライセンスは広く利用されているライセンスの一例ですが、用途に合わせて他のライセンス（Apache-2.0、GPLなど）も選べます。迷う場合は <a href="https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository" target="_blank" rel="noopener" style="color: var(--accent-cyan);">GitHub公式のライセンス情報</a> や <a href="https://choosealicense.com/" target="_blank" rel="noopener" style="color: var(--accent-cyan);">Choose a License</a>、またはAIで確認してください。
         </p>
         <div class="code-container">
           <div class="code-header">
             <span>LICENSE (MIT)</span>
-            <button class="btn-copy" data-copy-text="${encodeURIComponent(mitLicense)}">LICENSEをコピー</button>
+            <button class="btn-copy" data-copy-type="license" data-copy-text="${encodeURIComponent(mitLicense)}">LICENSEをコピー</button>
           </div>
           <div class="code-content">${escapeHtml(mitLicense)}</div>
         </div>
@@ -139,7 +163,7 @@ export function renderStep7(state) {
       <div class="step-tag">Step 7 / Webアプリの公開</div>
       <h2 class="step-title">GitHub Pagesで世界に公開する</h2>
       <p class="step-desc">
-        HTML/CSS/JavaScriptで作られたWebツールの場合は、GitHub Pages機能を使って無料で誰でもアクセスできるURLを発行できます。
+        HTML/CSS/JavaScriptで作られたWebツールの場合は、GitHub Pages機能を使って無料で公開用のURLを発行できます。
       </p>
 
       <div class="guide-box">
@@ -197,9 +221,11 @@ export function renderStep8(state) {
       <div class="guide-box" style="border-left-color: var(--success); margin-bottom: 24px;">
         <h4>公開後の最終チェック</h4>
         <ul>
-          <li>スマホやPCのブラウザで公開URLを開いて表示されるか</li>
-          <li>ボタンや入力欄などのJavaScript機能がエラーなく動作するか</li>
-          <li>画像やアイコンなどのリンク切れがないか</li>
+          <li>公開URLのページが表示されるか</li>
+          <li>ページ内のリンクが正しく動くか</li>
+          <li>ボタンや入力欄などのJavaScriptが正常に動作するか</li>
+          <li>画像やアイコンなどのファイルが表示され、リンク切れがないか</li>
+          <li>GitHub上でREADMEが正しく表示されるか</li>
         </ul>
       </div>
 

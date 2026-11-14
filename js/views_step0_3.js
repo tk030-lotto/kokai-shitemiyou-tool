@@ -12,16 +12,16 @@ export function renderStep0() {
       <h2 class="step-title">公開してみよう。</h2>
       <p class="step-desc">
         AIを使って作ったソフトウェア、動いたならぜひ世界に見せてみませんか？<br>
-        Gitやコマンドの知識がなくても大丈夫。Webブラウザから順番に進めていくだけで、あなたの作品をGitHubやGitHub Pagesで安全に公開できます。
+        Gitやコマンドの知識がなくても進められます。Webブラウザから順番に手順に沿って進めることで、あなたの作品をGitHubやGitHub Pagesで公開する方法を案内します。
       </p>
 
       <div class="guide-box">
         <h4>✨ このツールでできること</h4>
         <ul>
-          <li>公開前の安全・品質セルフチェック（機密情報の漏洩防止）</li>
+          <li>公開前の確認セルフチェック（機密情報が含まれていないかの確認）</li>
           <li>GitHubアカウントの準備とリポジトリの作成手順案内</li>
-          <li>ブラウザからのドラッグ＆ドロップによる簡単ファイル登録</li>
-          <li>見栄えの良い <code>README.md</code> の自動生成</li>
+          <li>ブラウザからのドラッグ＆ドロップによるファイル登録手順</li>
+          <li><code>README.md</code> のたたき台の生成</li>
           <li>Webアプリの GitHub Pages 無料公開手順</li>
         </ul>
       </div>
@@ -63,9 +63,17 @@ export function renderStep1(state) {
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="input-tool-desc">どんなツールですか？（簡単な説明）</label>
+        <label class="form-label" for="input-tool-desc">どんなツールですか？（用途や概要）</label>
         <textarea id="input-tool-desc" class="form-textarea" placeholder="例: 選択したフォルダ内の連番ファイルを指定した名前に一括リネームできるWebツールです。">${escapeHtml(state.toolDescription)}</textarea>
       </div>
+
+      <div class="form-group">
+        <label class="form-label" for="input-author-name">著作権者名（GitHubユーザー名または氏名）</label>
+        <input type="text" id="input-author-name" class="form-input" placeholder="例: tk030-lotto または 山田太郎" value="${escapeHtml(state.authorName)}">
+        <p class="form-hint">生成するREADMEとLICENSEの Copyright に使います。</p>
+      </div>
+
+      <p class="form-hint" style="margin-bottom: 16px;">※ 入力内容はこのブラウザ内（localStorage）に自動保存されます。</p>
 
       <div class="btn-group">
         <button class="btn btn-secondary" id="btn-prev">戻る</button>

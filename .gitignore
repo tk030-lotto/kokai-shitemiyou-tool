@@ -40,10 +40,13 @@ RECORD.md
 AGENTS.md
 CLAUDE.md
 GEMINI.md
+CORE-RULES.md
+UI-STANDARD.md
 
 # 開発ドキュメント除外（フェーズ2-B）
 AUDIT_REPORT.md
 CODE_REVIEW_REPORT*.md
+PRIMARY-REVIEW*.md
 
 # 仕様書除外（フェーズ2-C-β）
 仕様書*.md

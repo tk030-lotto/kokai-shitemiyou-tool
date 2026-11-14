@@ -9,11 +9,6 @@
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -48,11 +43,29 @@
     <footer style="margin-top: 32px; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
       <p>公開してみよう。ツール &copy; 2026 MIT License</p>
       <p style="margin-top: 6px;">
-        <button id="btn-global-reset" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer; font-size: 0.8rem;">
+        入力内容はこのブラウザ内（localStorage）に自動保存され、外部へは送信されません。
+      </p>
+      <p style="margin-top: 6px;">
+        <button type="button" id="btn-global-reset" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer; font-size: 0.8rem;">
           最初からやり直す（リセット）
         </button>
+        <span style="margin-left: 4px;">で保存内容を消去できます。</span>
       </p>
     </footer>
+  </div>
+
+  <!-- Reset Confirmation Dialog -->
+  <div id="reset-dialog-backdrop" class="modal-backdrop" hidden>
+    <div id="reset-dialog" class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="reset-dialog-title" aria-describedby="reset-dialog-desc" tabindex="-1">
+      <h2 id="reset-dialog-title" class="modal-title">入力内容と進捗をリセット</h2>
+      <p id="reset-dialog-desc" class="modal-desc">
+        このブラウザに保存されている入力内容とチェック状態をすべて消去し、最初の画面へ戻りますか？
+      </p>
+      <div class="modal-actions">
+        <button type="button" id="btn-reset-cancel" class="btn btn-secondary">キャンセル</button>
+        <button type="button" id="btn-reset-confirm" class="btn btn-danger">リセットする</button>
+      </div>
+    </div>
   </div>
 
   <!-- Toast Notification Container -->
