@@ -3,6 +3,7 @@ Backup/
 
 # 一時作業フォルダの除外
 scratch/
+.playwright-mcp/
 
 # Python関連の一時ファイル・仮想環境
 __pycache__/
